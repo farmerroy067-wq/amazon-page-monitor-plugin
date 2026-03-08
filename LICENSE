@@ -1,4 +1,21 @@
 MIT License
+#### 2️⃣ `.gitignore`（忽略敏感文件）
+```gitignore
+# 依赖
+node_modules/
+*.log
+
+# 环境变量
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+
+# 系统文件
+.DS_Store
+Thumbs.db
 
 Copyright (c) 2026 farmerroy067-wq
 
