@@ -19,14 +19,17 @@
 
 ```text
 amazon-page-monitor-plugin/
-├── manifest.json
+├── manifest.json          # 扩展配置文件
+├── .gitignore             # Git 忽略规则
+├── icons/                 # 扩展图标
+│   └── icon.svg
 ├── src/
-│   ├── background.js
-│   └── content.js
+│   ├── background.js      # Service Worker（后台服务）
+│   └── content.js         # 内容脚本（页面数据抓取）
 └── popup/
-    ├── popup.html
-    ├── popup.css
-    └── popup.js
+    ├── popup.html         # 弹窗界面
+    ├── popup.css          # 弹窗样式
+    └── popup.js           # 弹窗逻辑
 ```
 
 ## 安装方式（开发者模式）
