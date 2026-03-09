@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Amazon Page Monitor Plugin",
   "version": "1.0.0",
-  "description": "监控亚马逊商品页面的价格、评分、评论和排名变化。",
+  "description": "Monitor Amazon product pages for price, rating, reviews, and ranking changes.",
   "icons": {
     "16": "icons/icon.svg",
     "48": "icons/icon.svg",
@@ -38,6 +38,6 @@
   ],
   "action": {
     "default_popup": "popup/popup.html",
-    "default_title": "Amazon 监控"
+    "default_title": "Amazon Monitor"
   }
 }
