@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Amazon 页面监控</title>
+    <link rel="stylesheet" href="./popup.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Amazon 页面监控 1.0.0</h1>
+      <p id="status">准备就绪。</p>
+
+      <section class="card">
+        <h2>当前页面数据</h2>
+        <pre id="currentData">未读取</pre>
+      </section>
+
+      <section class="actions">
+        <button id="refreshBtn">刷新读取</button>
+        <button id="saveBtn">保存快照</button>
+        <button id="exportBtn">导出 JSON</button>
+        <button id="clearBtn" class="danger">清空该商品历史</button>
+      </section>
+
+      <section class="card">
+        <h2>历史记录</h2>
+        <ul id="historyList"></ul>
+      </section>
+    </main>
+
+    <script src="./popup.js"></script>
+  </body>
+</html>
