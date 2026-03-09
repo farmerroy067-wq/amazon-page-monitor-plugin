@@ -7,7 +7,24 @@ const saveBtn = document.getElementById('saveBtn');
 const exportBtn = document.getElementById('exportBtn');
 const clearBtn = document.getElementById('clearBtn');
 
+const titleEl = document.getElementById('title');
+const currentDataTitleEl = document.getElementById('currentDataTitle');
+const historyTitleEl = document.getElementById('historyTitle');
+
 let currentData = null;
+
+// Initialize UI with i18n
+function initUI() {
+  titleEl.textContent = t('title') + ' 1.0.0';
+  currentDataTitleEl.textContent = t('currentData');
+  historyTitleEl.textContent = t('history');
+  refreshBtn.textContent = t('refreshBtn');
+  saveBtn.textContent = t('saveBtn');
+  exportBtn.textContent = t('exportBtn');
+  clearBtn.textContent = t('clearBtn');
+  currentDataEl.textContent = t('notRead');
+  statusEl.textContent = t('ready');
+}
 
 function setStatus(text) {
   statusEl.textContent = text;
@@ -22,7 +39,7 @@ function renderHistory(items) {
 
   if (!items.length) {
     const li = document.createElement('li');
-    li.textContent = '暂无历史记录';
+    li.textContent = t('noHistory');
     historyListEl.appendChild(li);
     return;
   }
@@ -32,7 +49,7 @@ function renderHistory(items) {
     .reverse()
     .forEach((item) => {
       const li = document.createElement('li');
-      li.textContent = `${item.capturedAt} | ${item.price || '无价格'} | ${item.rating || '无评分'} | ${item.reviews || '无评论数'}`;
+      li.textContent = `${item.capturedAt} | ${item.price || '-'} | ${item.rating || '-'} | ${item.reviews || '-'}`;
       historyListEl.appendChild(li);
     });
 }
@@ -45,12 +62,12 @@ async function getActiveTab() {
 async function captureFromPage() {
   const tab = await getActiveTab();
   if (!tab?.id || !tab.url?.includes('amazon.')) {
-    throw new Error('请在 Amazon 商品页面打开插件。');
+    throw new Error(t('openOnAmazon'));
   }
 
   const response = await chrome.tabs.sendMessage(tab.id, { type: 'CAPTURE_PAGE_DATA' });
   if (!response?.ok) {
-    throw new Error(response?.error || '读取页面数据失败。');
+    throw new Error(response?.error || 'Read failed.');
   }
 
   return response.data;
@@ -68,21 +85,21 @@ async function loadHistory(asin) {
 
 async function refresh() {
   try {
-    setStatus('正在读取页面...');
+    setStatus(t('reading'));
     currentData = await captureFromPage();
     renderCurrentData(currentData);
     await loadHistory(currentData.asin);
-    setStatus('读取成功。');
+    setStatus(t('readSuccess'));
   } catch (error) {
     setStatus(error.message);
-    currentDataEl.textContent = '读取失败';
+    currentDataEl.textContent = t('readFailed');
     historyListEl.innerHTML = '';
   }
 }
 
 async function saveSnapshot() {
   if (!currentData?.asin) {
-    setStatus('无可保存数据，请先刷新读取。');
+    setStatus(t('noDataToSave'));
     return;
   }
 
@@ -92,17 +109,17 @@ async function saveSnapshot() {
   });
 
   if (!response?.ok) {
-    setStatus(response?.error || '保存失败。');
+    setStatus(response?.error || t('saveFailed'));
     return;
   }
 
   await loadHistory(currentData.asin);
-  setStatus(`已保存，当前商品共 ${response.count} 条记录。`);
+  setStatus(t('saveSuccess', { count: response.count }));
 }
 
 function exportJson() {
   if (!currentData?.asin) {
-    setStatus('没有可导出的商品历史。');
+    setStatus(t('noHistoryExport'));
     return;
   }
 
@@ -118,19 +135,19 @@ function exportJson() {
       a.download = `${currentData.asin}-snapshots.json`;
       a.click();
       URL.revokeObjectURL(url);
-      setStatus('导出完成。');
+      setStatus(t('exportSuccess'));
     });
 }
 
 async function clearCurrentAsinHistory() {
   if (!currentData?.asin) {
-    setStatus('当前商品无 ASIN，无法清空。');
+    setStatus(t('noAsinClear'));
     return;
   }
 
   await chrome.runtime.sendMessage({ type: 'CLEAR_SNAPSHOTS', asin: currentData.asin });
   await loadHistory(currentData.asin);
-  setStatus('已清空该商品历史。');
+  setStatus(t('clearSuccess'));
 }
 
 refreshBtn.addEventListener('click', refresh);
@@ -138,4 +155,7 @@ saveBtn.addEventListener('click', saveSnapshot);
 exportBtn.addEventListener('click', exportJson);
 clearBtn.addEventListener('click', clearCurrentAsinHistory);
 
-document.addEventListener('DOMContentLoaded', refresh);
+document.addEventListener('DOMContentLoaded', () => {
+  initUI();
+  refresh();
+});

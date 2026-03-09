@@ -8,7 +8,7 @@ async function getSnapshotMap() {
 
 async function saveSnapshot(snapshot) {
   if (!snapshot?.asin) {
-    return { ok: false, error: '缺少 ASIN，无法保存快照。' };
+    return { ok: false, error: 'Missing ASIN. Cannot save snapshot.' };
   }
 
   const map = await getSnapshotMap();
@@ -59,7 +59,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       return;
     }
 
-    sendResponse({ ok: false, error: '未知消息类型。' });
+    sendResponse({ ok: false, error: 'Unknown message type.' });
   })();
 
   return true;

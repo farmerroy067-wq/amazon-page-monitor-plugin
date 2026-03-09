@@ -1,10 +1,78 @@
-# amazon-page-monitor-plugin
+# Amazon Page Monitor Plugin
+
+[中文文档](#中文文档) | English
+
+A **Manifest V3 browser extension** for Chrome/Edge that captures and saves key product data snapshots on Amazon product detail pages.
+
+## Features (v1.0.0)
+
+- Product title extraction
+- Product price extraction (common price nodes)
+- Rating and review count extraction
+- Best Sellers Rank text extraction
+- Save historical snapshots by ASIN to `chrome.storage.local`
+- Popup displays current data and history
+- Export product history as JSON
+- Clear product history
+
+## Project Structure
+
+```text
+amazon-page-monitor-plugin/
+├── manifest.json          # Extension config
+├── .gitignore             # Git ignore rules
+├── icons/                 # Extension icons
+│   └── icon.svg
+├── src/
+│   ├── background.js      # Service Worker
+│   └── content.js         # Content script (data extraction)
+└── popup/
+    ├── popup.html         # Popup UI
+    ├── popup.css          # Popup styles
+    └── popup.js           # Popup logic
+```
+
+## Installation (Developer Mode)
+
+1. Open browser extensions page:
+   - Chrome: `chrome://extensions`
+   - Edge: `edge://extensions`
+2. Enable **Developer mode**.
+3. Click **Load unpacked**.
+4. Select this repository directory.
+
+## Usage
+
+1. Open any Amazon product detail page.
+2. Click the extension icon, the popup will automatically read the current page.
+3. Click **Save Snapshot** to save current data to local history.
+4. Click **Export JSON** to download the ASIN's history data.
+5. To reset, click **Clear History**.
+
+## Notes
+
+- The extension only works on configured Amazon domains.
+- Page structure changes may affect extraction accuracy.
+- Current version is a draft-stage v1.0.0, focused on "getting the core workflow working first".
+
+## Roadmap
+
+- Scheduled monitoring (alarm + auto sampling)
+- Price change alerts
+- Trend charts
+- CSV export and multi-product management
+
+---
+
+# 中文文档
+
+English | [中文文档](#中文文档)
 
 亚马逊页面数据监控分析插件（v1.0.0）。
 
 这是一个可直接加载到 Chrome/Edge 的 **Manifest V3 浏览器插件**，用于在商品详情页手动抓取并保存关键数据快照。
 
-## 1.0.0 已实现功能（保持简单可用）
+## 已实现功能
 
 - 商品标题抓取
 - 商品价格抓取（常见价格节点）
@@ -53,9 +121,9 @@ amazon-page-monitor-plugin/
 
 - 插件仅在配置的 Amazon 站点域名下工作。
 - 页面结构变化会影响抓取准确度，后续版本可补充更多选择器兜底。
-- 当前版本是草稿阶段的可用 1.0.0，重点是“先跑通核心流程”。
+- 当前版本是草稿阶段的可用 1.0.0，重点是"先跑通核心流程"。
 
-## 后续建议（可选）
+## 后续计划
 
 - 增加定时监控（alarm + 自动采样）
 - 增加价格变动提醒
